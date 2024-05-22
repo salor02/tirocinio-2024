@@ -1,0 +1,6 @@
+nordic  33/50 successful conn 50/50
+fake    28/50 successful conn 50/50
+both(uniti)
+both(separati)
+
+nordic(monocanale) 42/50 conn 50/50

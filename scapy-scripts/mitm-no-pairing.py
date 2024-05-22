@@ -1,6 +1,5 @@
 from scapy.layers.bluetooth import *
 import scapy.layers.bluetooth as bt
-from time import sleep
 import select
 import os
 
