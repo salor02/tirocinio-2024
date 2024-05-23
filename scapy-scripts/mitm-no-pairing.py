@@ -1,5 +1,6 @@
 from scapy.layers.bluetooth import *
 import scapy.layers.bluetooth as bt
+from scapy.all import wrpcap, rdpcap
 import select
 import os
 
@@ -30,8 +31,8 @@ def queue(socket):
 
     return count
     
-server = BluetoothUserSocket(1)
-client = BluetoothUserSocket(0)
+server = BluetoothUserSocket(0)
+client = BluetoothUserSocket(1)
 
 #ans, unans = bt.sr(pkt)
 pkt_client = [
@@ -66,8 +67,10 @@ while True:
 current_waiting = client
 print('Starting capture from client...')
 
+sent_pkts_list = list()
+
 while True:
-    incoming_pkt = recv_packet(current_waiting,600)
+    incoming_pkt = recv_packet(current_waiting,15)
     
     if not incoming_pkt:
         print(f'Final queue from server: {queue(server)}')
@@ -88,6 +91,7 @@ while True:
             print(f'Forwarding [client -> server]: {incoming_pkt[HCI_ACL_Hdr]}')
             to_send = HCI_Hdr()/HCI_ACL_Hdr(handle=server_handle)/incoming_pkt[L2CAP_Hdr]
             server.send(to_send)
+            sent_pkts_list.append(to_send)
             current_waiting = server
             print('Switching, now waiting for server response')
 
@@ -102,16 +106,12 @@ while True:
         if current_waiting == client and incoming_pkt.opcode == 0x52:
             print(f'Forwarding [client -> server]: {incoming_pkt[HCI_ACL_Hdr]}')
             incoming_pkt.show()
+            sent_pkts_list.append(to_send)
             #print(f'Writing data: {incoming_pkt.value}')
             to_send = HCI_Hdr()/HCI_ACL_Hdr(handle=server_handle)/incoming_pkt[L2CAP_Hdr]
             server.send(to_send)
 
-
-#pkt = HCI_Hdr()/HCI_ACL_Hdr()/L2CAP_Hdr()/ATT_Hdr()/ATT_Read_Request(gatt_handle=0)
-#pkt = HCI_Hdr()/HCI_ACL_Hdr(handle=4)/L2CAP_Hdr()/ATT_Hdr()/ATT_Write_Request(gatt_handle=0x002a, data='\xff')
-
-
-#bt.sniff(store=False, prn = lambda x: print(x), lfilter = lambda p: HCI_ACL_Hdr in p)
-#pkt.show()
+print(sent_pkts_list)
+wrpcap("./sent_pkts_led.pcap", sent_pkts_list)
 
 
