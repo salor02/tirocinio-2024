@@ -24,9 +24,9 @@ if __name__ == '__main__':
     system('hciconfig hci0 down; hciconfig hci1 down')
 
     try:
-        server = BluetoothUserSocket(0)
+        server = BluetoothUserSocket(1)
         print('[OK] Server socket created')
-        client = BluetoothUserSocket(1)
+        client = BluetoothUserSocket(0)
         print('[OK] Client socket created')
     except Exception as e:
         print(e)

@@ -14,6 +14,8 @@ mybacon_format = Struct(
 )
 
 def device_found(device: BLEDevice, advertisement_data: AdvertisementData):
+    print(advertisement_data.manufacturer_data[0x0118])
+
     try:
         beacon_data = advertisement_data.manufacturer_data[0x0118]
         mybacon = mybacon_format.parse(beacon_data)

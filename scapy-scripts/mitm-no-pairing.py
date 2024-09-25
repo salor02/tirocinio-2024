@@ -31,15 +31,15 @@ def queue(socket):
 
     return count
     
-server = BluetoothUserSocket(0)
-client = BluetoothUserSocket(1)
+server = BluetoothUserSocket(1)
+client = BluetoothUserSocket(0)
 
 #ans, unans = bt.sr(pkt)
 pkt_client = [
     HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_Reset(),
     HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_LE_Set_Advertise_Enable(enable=0),
     HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_LE_Set_Advertise_Enable(enable=1),
-    HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_LE_Set_Advertising_Data(data='\x02\x01\x06\x03\x03\x0d\x18\x0f\x09\x45\x53\x50\x5f\x47\x41\x54\x54\x53\x5f\x44\x45\x4d\x4f')
+    #HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_LE_Set_Advertising_Data(data='\x02\x01\x06\x03\x03\x0d\x18\x0f\x09\x45\x53\x50\x5f\x47\x41\x54\x54\x53\x5f\x44\x45\x4d\x4f')
     #HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_LE_Set_Advertising_Data(data='\x02\x01\x06\x03\x02\x12\x18\x0e\x09\x45\x4c\x4b\x2d\x42\x4c\x45\x44\x4f\x4d\x20\x20\x20'),
     #HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_LE_Set_Advertising_Data(data='\x02\x01\x02\x06\x09\x50\x69\x78\x6f\x6f'),
     ]
@@ -70,7 +70,7 @@ print('Starting capture from client...')
 sent_pkts_list = list()
 
 while True:
-    incoming_pkt = recv_packet(current_waiting,15)
+    incoming_pkt = recv_packet(current_waiting,150)
     
     if not incoming_pkt:
         print(f'Final queue from server: {queue(server)}')

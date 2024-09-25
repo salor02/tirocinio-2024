@@ -1,6 +1,7 @@
 nordic  33/50 successful conn 50/50
 fake    28/50 successful conn 50/50
-both(uniti)
-both(separati)
+both(uniti) 25/50 successful conn 50/50
+both(separati) da vedere
 
+37+38 46/50 (31 su 37 e 15 su 38) successful conn 50/50
 nordic(monocanale) 42/50 conn 50/50

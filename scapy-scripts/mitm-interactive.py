@@ -85,8 +85,5 @@ while True:
             print(f'Final queue from server: {queue(server)}')
             break
 
-
-
-
 sleep(50)
 

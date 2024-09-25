@@ -5,8 +5,10 @@ from scapy.fields import (
     SignedByteField,
     StrFixedLenField
 )
-from scapy.layers.bluetooth import EIR_Hdr, EIR_Manufacturer_Specific_Data, UUIDField, LowEnergyBeaconHelper, IntField, BluetoothHCISocket
+
 from scapy.packet import Packet
+from scapy.layers.bluetooth import *
+import scapy.layers.bluetooth as bt
 
 bt = BluetoothHCISocket(0)
 
@@ -21,9 +23,7 @@ class MyBacon(Packet, LowEnergyBeaconHelper):
         # The spec says this is 20 bytes, with >=16 bytes being an
         # organisational unit-specific identifier. However, the Android library
         # treats this as UUID + uint16 + uint16.
-        ShortField("id1", None),
-        IntField("ciao", None),
-        SignedByteField("tx_power", None)
+        IntField("ciao", None)
     ]
 
     @classmethod
@@ -47,18 +47,18 @@ EIR_Manufacturer_Specific_Data.register_magic_payload(MyBacon)
 
 cycle = 0
 
+pkt = HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_LE_Set_Advertise_Enable(enable=1)
+ans, unans = bt.sr(pkt)
+print('Advertising phase started')
+
 while True:
     sleep(1)
     cycle = cycle + 1
     ab = MyBacon(
-        id1=324,
-        ciao=cycle,
-        tx_power=-50,
+        ciao=cycle
     )
     bt.sr(ab.build_set_advertising_data())
     print("SENT: " + str(cycle))
 
 pkt = HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_LE_Set_Advertise_Enable(enable=0)
-ans, unans = bt.sr(pkt)
-pkt = HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_LE_Set_Advertise_Enable(enable=1)
 ans, unans = bt.sr(pkt)
