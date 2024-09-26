@@ -11,8 +11,8 @@ LENGTH = b'\x05'
 #AD_type
 MANUFACTURER_SPECIFIC_DATA_AD_TYPE = b'\xff'
 
-#company ID richiesto da standard, in questo caso è fittizio
-RADIUS_NETWORKS_COMPANY_ID = b'\x01\x18'
+#company ID richiesto da standard, in questo caso corrisponde a Samsung
+COMPANY_ID = b'\xfc\x91'
 
 #hearthbeat iniziale
 hearthbeat = 80
@@ -29,7 +29,7 @@ while hearthbeat > 60:
     hearthbeat = hex(hearthbeat + increment)[2:].zfill(4)
 
     #costruzione AD_data come da standard
-    AD_data = LENGTH + MANUFACTURER_SPECIFIC_DATA_AD_TYPE + RADIUS_NETWORKS_COMPANY_ID + bytes.fromhex(hearthbeat)
+    AD_data = LENGTH + MANUFACTURER_SPECIFIC_DATA_AD_TYPE + COMPANY_ID + bytes.fromhex(hearthbeat)
     
     #costruzione ed invio comando
     command = HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_LE_Set_Advertising_Data(data=AD_data)

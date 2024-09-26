@@ -1,8 +1,8 @@
 import asyncio
 from bleak import BleakScanner
 
-#company ID richiesto da standard, in questo caso è fittizio
-RADIUS_NETWORKS_COMPANY_ID = b'\x01\x18'
+#company ID richiesto da standard, in questo caso corrisponde a Samsung
+COMPANY_ID = b'\xfc\x91'
 
 def detection_callback(device, advertisement_data):
 
@@ -10,7 +10,7 @@ def detection_callback(device, advertisement_data):
     
     for company_id, data in manufacturer_data.items():
         #se company id corrisponde a quello ricercato significa che il dato è di nostro interesse
-        if company_id == int.from_bytes(RADIUS_NETWORKS_COMPANY_ID, byteorder='little'):
+        if company_id == int.from_bytes(COMPANY_ID, byteorder='little'):
             
             #i primi 2 byte corrispondono al battito, cioè le prime 4 cifre della converisone in esadecimale
             hearthbeat = data.hex()[0:4]
