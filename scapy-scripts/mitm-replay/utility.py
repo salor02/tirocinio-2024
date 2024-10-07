@@ -35,7 +35,6 @@ ATT_Handle_Value = [
     ATT_Handle_Value_Indication,
 ]
 
-
 def recv_packet(socket, timeout):
     packet_check = select.select([socket], [], [], timeout)
 

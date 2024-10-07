@@ -12,7 +12,7 @@ LENGTH = b'\x05'
 MANUFACTURER_SPECIFIC_DATA_AD_TYPE = b'\xff'
 
 #company ID richiesto da standard, in questo caso corrisponde a Samsung
-COMPANY_ID = b'\xfc\x91'
+COMPANY_ID = b'\x91\xfc'
 
 #hearthbeat iniziale
 hearthbeat = 80
