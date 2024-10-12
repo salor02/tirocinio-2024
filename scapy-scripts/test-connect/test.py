@@ -16,7 +16,9 @@ def recv_packet(socket, timeout):
     
 client = BluetoothUserSocket(0)
 
-test_num = 50
+test_num = 100
+
+successful_conn = 0
 
 for i in range(test_num):
     print(f"Starting test {i}")
@@ -26,13 +28,11 @@ for i in range(test_num):
         incoming_pkt = recv_packet(client,1)
         if not incoming_pkt:
             break
-        # Check if event code is 'LE Meta Event', p1190
-        if hasattr(incoming_pkt, 'code') and incoming_pkt.code == 0x3e:
-            # Check if subevent code is 'LE Connection Complete Event', p1190
-            if hasattr(incoming_pkt, 'event') and incoming_pkt.event == 0x01:
-                print("LE Connection Complete Event")
-                handle = incoming_pkt.handle
-                print(f'Client handle found: {handle}')
+        if HCI_LE_Meta_Connection_Complete in incoming_pkt:
+            print(f"Connection {i} completed")
+            handle = incoming_pkt.handle
+            print(f'Client handle found: {handle}')
+            successful_conn += 1
     time.sleep(5)
     if not handle:
         print("Connection failed")
@@ -41,6 +41,9 @@ for i in range(test_num):
         res = client.send(HCI_Hdr()/HCI_Command_Hdr()/HCI_Cmd_Disconnect(handle=handle))
         print("Disconnected")
     time.sleep(5)
+
+print(f'Test completed, {successful_conn} successful connections')
+
 
 
 
